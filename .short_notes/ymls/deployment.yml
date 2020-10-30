@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels: # Set labels (multi) cho deployment
+    app: hello-world-rest-api
+  name: hello-world-rest-api
+  namespace: default
+spec: # Định nghĩa các config cho deployment
+  replicas: 2 # Số replicas
+  selector:
+    matchLabels: # Match với pod thông qua labels
+      app: hello-world-rest-api
+  strategy:
+    rollingUpdate: # Chiến lược rolling update khi release
+      maxSurge: 25% # Số pod có thể được sử dụng khi release = replicas + maxSurge * replicas
+      maxUnavailable: 25% # Số pod có thể không khả dụng khi release = replicas * maxUnavailable
+    type: RollingUpdate
+  template: # Định nghĩa 1 Pod
+    metadata:
+      labels: # Set label cho pod
+        app: hello-world-rest-api
+    spec:
+      containers: # 1 pod có thể có nhiều containers
+      - image: in28min/hello-world-rest-api:0.0.3.RELEASE
+        imagePullPolicy: IfNotPresent
+        name: hello-world-rest-api # Tên container
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30 # Định nghĩa số giây khi container bị stop để xử lý những công việc còn lại
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels: # Label của Service
+    app: hello-world-rest-api
+  name: hello-world-rest-api
+  namespace: default
+spec:
+  ports:
+  - nodePort: 32605
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: hello-world-rest-api
+  sessionAffinity: None
+  type: LoadBalancer
