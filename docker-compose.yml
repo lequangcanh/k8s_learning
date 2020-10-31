@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  db:
+    image: mysql:5.7
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "12345678"
+      MYSQL_USER: "k8s"
+      MYSQL_PASSWORD: "12345678"
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ./entrypoint.sh
+    volumes:
+      - .:/app
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    environment:
+      DATABASE_HOST: "db"
+      DATABASE_PORT: "3306"
+      DATABASE_USERNAME: "root"
+      DATABASE_PASSWORD: "12345678"
+      DATABASE_NAME: "k8s_dev"
+    stdin_open: true
+    tty: true
+volumes:
+  db-data:
