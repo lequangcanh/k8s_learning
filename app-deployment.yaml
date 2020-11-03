@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: app
+  name: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: app
+  template:
+    metadata:
+      labels:
+        io.kompose.service: app
+    spec:
+      containers:
+        - args:
+            - ./entrypoint.sh
+          env:
+            - name: DATABASE_HOST
+              value: 35.238.71.199
+            - name: DATABASE_NAME
+              value: k8s_dev
+            - name: DATABASE_PASSWORD
+              value: "12345678"
+            - name: DATABASE_PORT
+              value: "3307"
+            - name: DATABASE_USERNAME
+              value: root
+          image: lequangcanh/k8s_learning:0.0.2
+          name: app
+          ports:
+            - containerPort: 3000
+          resources: {}
+          stdin: true
+          tty: true
+      restartPolicy: Always
