@@ -19,11 +19,17 @@ spec:
             - ./entrypoint.sh
           env:
             - name: DATABASE_HOST
-              value: 35.238.71.199
+              value: db
             - name: DATABASE_NAME
-              value: k8s_dev
+              valueFrom: # Sử dụng configMap
+                configMapKeyRef:
+                  key: DATABASE_NAME
+                  name: app-configmap
             - name: DATABASE_PASSWORD
-              value: "12345678"
+              valueFrom: # Sử dụng secret
+                secretKeyRef:
+                  key: DATABASE_PASSWORD
+                  name: app-secret
             - name: DATABASE_PORT
               value: "3307"
             - name: DATABASE_USERNAME

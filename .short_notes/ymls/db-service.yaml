@@ -5,7 +5,7 @@ metadata:
     io.kompose.service: db
   name: db
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: "3307"
       port: 3307
