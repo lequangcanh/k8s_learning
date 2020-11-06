@@ -10,7 +10,7 @@
 - Khi tạo các node, K8s sẽ cần 1 khoảng không gian nhỏ để quản lý các node, chính vì vậy dung lượng avaiable sẽ nhỏ hơn lúc đăng ký node
 - Resize số node của cluster về 0 khi không dùng để tránh mất tiền
 
-  `gcloud container clusters resize --zone <zone-name> <cluster-name> --nun-size=0`
+  `gcloud container clusters resize --zone <zone-name> <cluster-name> --num-nodes=0`
 
 - Tạo deployment
 
